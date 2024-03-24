@@ -1,0 +1,17 @@
+server:
+  port: 5001
+
+spring:
+  application:
+    name: project_user_service
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/project_user_service
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#   jpa:
+#     show-sql: true
+
