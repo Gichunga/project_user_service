@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.message.ParameterizedMessage;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,20 +30,23 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         if(jwt!=null){
             jwt = jwt.substring(7);
             try{
+                //parse a jwt token and extract the email and authorities from it to set up authentication from it
                 SecretKey secretKey = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
                 Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJwt(jwt).getBody();
+                //null checks on the parsed claim
+                if(claims != null){
+                    String email = String.valueOf(claims.get("email"));
+                    String authorities = String.valueOf(claims.get("authorities"));
 
-                String email = String.valueOf(claims.get("email"));
-                String authorities = String.valueOf(claims.get("authorities"));
-
-                List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, grantedAuthorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, grantedAuthorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }catch (Exception e){
+                logger.error(new ParameterizedMessage("Error parsing JWT token: {}", e.getMessage()),e);
                 throw new BadCredentialsException("Invalid token");
             }
         }
-
-
+        filterChain.doFilter(request, response);
     }
 }
