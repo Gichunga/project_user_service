@@ -8,15 +8,16 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    User createUser(User user) throws Exception;
+//    User createUser(User user) throws Exception;
+//
+//    String deleteUser(Long id) throws Exception;
+//
+//    List<User> allUsers();
+//
+//    User updateUser(User user, Long id) throws Exception;
+//
+//    User findUserById(Long id) throws Exception;
 
-    String deleteUser(Long id) throws Exception;
-
-    List<User> allUsers();
-
-    User updateUser(User user, Long id) throws Exception;
-
-    User findUserById(Long id) throws Exception;
 
     User findUserByJwt(String jwt) throws Exception;
 }

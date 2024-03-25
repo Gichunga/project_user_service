@@ -38,9 +38,9 @@ public class JwtProvider {
         return String.join(",", authorities);
     }
 
-    public String getEmailFromJwtToken(String jwt){
+    public static String getEmailFromJwtToken(String jwt){
         jwt = jwt.substring(7);
-        Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJwt(jwt).getBody();
+        Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(jwt).getBody();
         return String.valueOf(claims.get("email"));
     }
 }

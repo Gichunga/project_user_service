@@ -27,15 +27,20 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String jwt = request.getHeader(JwtConstant.JWT_HEADER);
+        System.out.println("jwt ----- " + jwt);
         if(jwt!=null){
             jwt = jwt.substring(7);
             try{
                 //parse a jwt token and extract the email and authorities from it to set up authentication from it
                 SecretKey secretKey = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
-                Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJwt(jwt).getBody();
+                System.out.println("secret key -- hmac " +secretKey);
+                Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(jwt).getBody();
+
+                System.out.println("claims ----------- " +claims);
                 //null checks on the parsed claim
                 if(claims != null){
                     String email = String.valueOf(claims.get("email"));
+                    System.out.println("email ---- " +email);
                     String authorities = String.valueOf(claims.get("authorities"));
 
                     List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
@@ -43,7 +48,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }catch (Exception e){
-                logger.error(new ParameterizedMessage("Error parsing JWT token: {}", e.getMessage()),e);
+//                logger.error(new ParameterizedMessage("Error parsing JWT token: {}", e.getMessage()),e);
                 throw new BadCredentialsException("Invalid token");
             }
         }
