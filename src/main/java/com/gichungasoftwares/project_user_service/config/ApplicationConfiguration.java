@@ -1,4 +1,4 @@
-package com.gichungasoftwares.project_user_service.model.config;
+package com.gichungasoftwares.project_user_service.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;

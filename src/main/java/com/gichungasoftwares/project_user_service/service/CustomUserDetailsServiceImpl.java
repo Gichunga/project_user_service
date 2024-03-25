@@ -1,4 +1,4 @@
-package com.gichungasoftwares.project_user_service.model.service;
+package com.gichungasoftwares.project_user_service.service;
 
 import com.gichungasoftwares.project_user_service.model.User;
 import com.gichungasoftwares.project_user_service.repository.UserRepository;
