@@ -12,7 +12,7 @@ public interface UserService {
 //
 //    String deleteUser(Long id) throws Exception;
 //
-//    List<User> allUsers();
+    List<User> allUsers();
 //
 //    User updateUser(User user, Long id) throws Exception;
 //

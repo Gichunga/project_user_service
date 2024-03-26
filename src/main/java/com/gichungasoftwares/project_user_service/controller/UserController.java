@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/users")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -19,5 +21,10 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<User> findUserByJwt(@RequestHeader("Authorization") String jwt) throws Exception {
         return new ResponseEntity<>(userService.findUserByJwt(jwt), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> allUsers(@RequestHeader("Authorization") String jwt) throws Exception {
+        return new ResponseEntity<>(userService.allUsers(), HttpStatus.OK);
     }
 }
